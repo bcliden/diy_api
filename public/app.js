@@ -1,4 +1,4 @@
-$(document).ready(function(){
+document.addEventListener('DOMContentLoaded', function(){
     $.getJSON("/api/todos")
     .then(addTodos)
     .catch(err => console.log(err));
@@ -17,7 +17,6 @@ $(document).ready(function(){
         e.stopPropagation();
         removeTodo($(this).parent())
     });
-
 });
 
 function addTodos(todos){
