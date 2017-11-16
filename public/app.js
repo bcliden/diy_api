@@ -1,7 +1,14 @@
+const list = document.querySelector('.list');
+
 document.addEventListener('DOMContentLoaded', function(){
-    $.getJSON("/api/todos")
+    fetch('/api/todos')
+    .then(response => response.json())
     .then(addTodos)
     .catch(err => console.log(err));
+
+    // $.getJSON("/api/todos")
+    // .then(addTodos)
+    // .catch(err => console.log(err));
 
     $('#todoInput').keypress(function(event){
         if(event.which == 13){
@@ -24,11 +31,17 @@ function addTodos(todos){
 }
 
 function addTodo(todo){
-    let newTodo = $(`<li class=task>${todo.name}<span>X</span></li>`);
-    newTodo.data('id', todo._id);
-    newTodo.data('completed', todo.completed);
-    if(todo.completed) $(newTodo).addClass('done');
-    $('.list').append(newTodo);
+    let newTodo = document.createElement('li');
+    newTodo.innerHTML = todo.name + "<span>X</span>";
+    newTodo.classList.add('task');
+    if(todo.completed) newTodo.classList.add('done');
+    console.dir(newTodo);
+    // let newTodo = $(`<li class=task>${todo.name}<span>X</span></li>`);
+    // newTodo.data('id', todo._id);
+    // newTodo.data('completed', todo.completed);
+    // if(todo.completed) $(newTodo).addClass('done');
+
+    list.appendChild(newTodo);
 }
 
 function createTodo(val){
