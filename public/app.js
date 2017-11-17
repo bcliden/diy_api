@@ -1,4 +1,5 @@
 const list = document.querySelector('#list');
+const todoInput = document.getElementById('todoInput');
 
 document.addEventListener('DOMContentLoaded', function(){
     fetch('/api/todos')
@@ -10,28 +11,41 @@ document.addEventListener('DOMContentLoaded', function(){
     // .then(addTodos)
     // .catch(err => console.log(err));
 
-    $('#todoInput').keypress(function(event){
+    todoInput.addEventListener('keydown', function(e){
         if(event.which == 13){
-            createTodo($(this).val());
+            console.log(e.target.value)
+            createTodo(e.target.value)
         }
-    });
+    })
+
+    // $('#todoInput').keypress(function(event){
+    //     if(event.which == 13){
+    //         createTodo($(this).val());
+    //     }
+    // });
 
     // $('.list').on('click', 'li', function(e){
     //     console.log(e);
     //     updateTodo($(this));
     // })
 
-    document.getElementById("list")
-    .addEventListener('click', function(e){
+    list.addEventListener('click', function(e){
         if(e.target && e.target.matches('li.task')){
             updateTodo(e.target);
         }
     })
 
-    $('.list').on('click', 'span', function(e){
+    // $('.list').on('click', 'span', function(e){
+    //     e.stopPropagation();
+    //     removeTodo($(this).parent())
+    // });
+
+    list.addEventListener('click', function(e){
         e.stopPropagation();
-        removeTodo($(this).parent())
-    });
+        if(e.target && e.target.matches('span')){
+            removeTodo(e.target.parentNode);
+        }
+    })
 });
 
 function addTodos(todos){
@@ -112,17 +126,29 @@ function updateTodo(todo){
 }
 
 function removeTodo(todo){
-    console.log(todo.dataset._id)
-    
-    $.ajax({
+    let url = `/api/todos/${todo.dataset._id}`;
+    console.log(todo.dataset._id.toString())
+    let childTodo = document.querySelector(`[data-_id="${todo.dataset._id}"]`);
+    console.log(childTodo);
+    fetch(url, {
         method: 'DELETE',
-        url: '/api/todos/' + todo.data('id')
     })
+    .then(res => res.json())
     .then(res => {
         console.log(res);
-        todo.remove();
+        todo.parentNode.removeChild(childTodo)
     })
-    .catch(err => console.log(err));
+
+
+//     $.ajax({
+//         method: 'DELETE',
+//         url: '/api/todos/' + todo.data('id')
+//     })
+//     .then(res => {
+//         console.log(res);
+//         todo.remove();
+//     })
+//     .catch(err => console.log(err));
 }
 
 function clearInput(){
