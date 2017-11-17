@@ -64,28 +64,32 @@ function createTodo(val){
 
 function updateTodo(todo){
     let url = `/api/todos/${todo.dataset._id}`;
-    let data = {completed: true};
+    let flipDone = !todo.classList.contains('done');
+    let data = { completed: flipDone };
     fetch(url, {
         method: 'PUT',
-        body: JSON.stringify(data),
         headers: {
-            
-        }
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
     })
     .then(res => res.json())
-    .then(updatedTodo => console.log(updatedTodo))
+    .then(updatedTodo => {
+        todo.classList.toggle('done');        
+    })
     .catch(err => console.log(err));
 
-    todo.classList.toggle('done');
     // let isDone = !todo.data('completed');
     // $.ajax({
-    //     method: 'PUT',
-    //     url: '/api/todos/' + todo.data('id'),
-    //     data: {completed: isDone}
+    //     method: 'put',
+    //     url: url,
+    //     data: data
     // })
     // .then(updatedTodo => {
-    //     todo.data('completed', isDone);
-    //     todo.toggleClass('done');
+        // todo.data('completed', isDone);
+        // todo.toggleClass('done');
+    //     todo.classList.toggle('done');
+        
     // })
     // .catch(err => console.log(err));
 }
