@@ -7,10 +7,6 @@ document.addEventListener('DOMContentLoaded', function(){
     .then(addTodos)
     .catch(err => console.log(err));
 
-    // $.getJSON("/api/todos")
-    // .then(addTodos)
-    // .catch(err => console.log(err));
-
     todoInput.addEventListener('keydown', function(e){
         if(event.which == 13){
             console.log(e.target.value)
@@ -18,27 +14,11 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     })
 
-    // $('#todoInput').keypress(function(event){
-    //     if(event.which == 13){
-    //         createTodo($(this).val());
-    //     }
-    // });
-
-    // $('.list').on('click', 'li', function(e){
-    //     console.log(e);
-    //     updateTodo($(this));
-    // })
-
     list.addEventListener('click', function(e){
         if(e.target && e.target.matches('li.task')){
             updateTodo(e.target);
         }
     })
-
-    // $('.list').on('click', 'span', function(e){
-    //     e.stopPropagation();
-    //     removeTodo($(this).parent())
-    // });
 
     list.addEventListener('click', function(e){
         e.stopPropagation();
@@ -58,12 +38,6 @@ function addTodo(todo){
     newTodo.classList.add('task');
     newTodo.dataset._id = todo._id;
     if(todo.completed) newTodo.classList.add('done');
-    
-    // let newTodo = $(`<li class=task>${todo.name}<span>X</span></li>`);
-    // newTodo.data('id', todo._id);
-    // newTodo.data('completed', todo.completed);
-    // if(todo.completed) $(newTodo).addClass('done');
-
     list.appendChild(newTodo);
 }
 
@@ -83,14 +57,6 @@ function createTodo(val){
         addTodo(newTodo);
     })
     .catch(err => console.log(err))
-
-
-    // $.post("/api/todos", {name: [val]})
-    // .then(newTodo => {
-    //     clearInput();
-    //     addTodo(newTodo);
-    // })
-    // .catch(err => console.log(err));
 }
 
 function updateTodo(todo){
@@ -109,20 +75,6 @@ function updateTodo(todo){
         todo.classList.toggle('done');        
     })
     .catch(err => console.log(err));
-
-    // let isDone = !todo.data('completed');
-    // $.ajax({
-    //     method: 'put',
-    //     url: url,
-    //     data: data
-    // })
-    // .then(updatedTodo => {
-        // todo.data('completed', isDone);
-        // todo.toggleClass('done');
-    //     todo.classList.toggle('done');
-        
-    // })
-    // .catch(err => console.log(err));
 }
 
 function removeTodo(todo){
@@ -138,17 +90,6 @@ function removeTodo(todo){
         console.log(res);
         todo.parentNode.removeChild(childTodo)
     })
-
-
-//     $.ajax({
-//         method: 'DELETE',
-//         url: '/api/todos/' + todo.data('id')
-//     })
-//     .then(res => {
-//         console.log(res);
-//         todo.remove();
-//     })
-//     .catch(err => console.log(err));
 }
 
 function clearInput(){
