@@ -54,12 +54,29 @@ function addTodo(todo){
 }
 
 function createTodo(val){
-    $.post("/api/todos", {name: [val]})
+    let url = `/api/todos/`
+    let data = { name: val }
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
     .then(newTodo => {
         clearInput();
         addTodo(newTodo);
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
+
+
+    // $.post("/api/todos", {name: [val]})
+    // .then(newTodo => {
+    //     clearInput();
+    //     addTodo(newTodo);
+    // })
+    // .catch(err => console.log(err));
 }
 
 function updateTodo(todo){
