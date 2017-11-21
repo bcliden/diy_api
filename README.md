@@ -12,7 +12,7 @@ Pros:
 Cons:
   - Heavy to import all of jQuery just for AJAX
   
-### Fetch (vanillajs branch)
+### Fetch (fetch branch)
 
 Pros:
   - Lightweight
