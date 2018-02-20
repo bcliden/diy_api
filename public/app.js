@@ -1,72 +1,71 @@
-$(document).ready(function(){
-    $.getJSON("/api/todos")
-    .then(addTodos)
-    .catch(err => console.log(err));
+const list = document.querySelector('.list');
+const todoInput = document.getElementById('todoInput');
 
-    $('#todoInput').keypress(function(event){
-        if(event.which == 13){
-            createTodo($(this).val());
-        }
-    });
-
-    $('.list').on('click', 'li', function(e){
-        updateTodo($(this));
-    })
-
-    $('.list').on('click', 'span', function(e){
-        e.stopPropagation();
-        removeTodo($(this).parent())
-    });
-
+document.addEventListener('DOMContentLoaded', () => {
+    axios.get('/api/todos')
+        // .then(addTodos)
+        .then(response => addTodos(response.data))        
+        .catch(err => console.error(err));
 });
 
-function addTodos(todos){
+todoInput.addEventListener('keydown', function(e){
+    if(event.which == 13){
+        createTodo(e.target.value)
+    }
+});
+
+list.addEventListener('click', function(e){
+    if(e.target && e.target.matches('li.task')){
+        updateTodo(e.target);
+    }
+});
+
+list.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(e.target && e.target.matches('span')){
+        removeTodo(e.target.parentNode);
+    }
+})
+
+function addTodos (todos) {
     todos.forEach(addTodo);
+};
+
+function addTodo (todo) {
+    let newTodo = document.createElement('li');
+    newTodo.innerHTML = todo.name + "<span>X</span>";
+    newTodo.classList.add('task');
+    newTodo.dataset._id = todo._id;
+    if(todo.completed) newTodo.classList.add('done');
+    
+    list.appendChild(newTodo);
+};
+
+function createTodo(val) {
+    axios.post('/api/todos', { name: val })
+        .then(response => {
+            clearInput();
+            addTodo(response.data);
+        })
+        .catch(err => console.error(err));
+};
+
+function updateTodo (todo) {
+    let url = `/api/todos/${todo.dataset._id}`;
+    let flipDone = !todo.classList.contains('done');
+    let data = { completed: flipDone };
+    axios.put(url, data)
+        .then(todo.classList.toggle('done'))
+        .catch(err => console.error(err));
+};
+
+function removeTodo (todo) {
+    let url = `/api/todos/${todo.dataset._id}`;
+    axios.delete(url)
+        .then(todo.parentNode.removeChild(todo))
+        .catch(err => console.error(err));
 }
 
-function addTodo(todo){
-    let newTodo = $(`<li class=task>${todo.name}<span>X</span></li>`);
-    newTodo.data('id', todo._id);
-    newTodo.data('completed', todo.completed);
-    if(todo.completed) $(newTodo).addClass('done');
-    $('.list').append(newTodo);
-}
-
-function createTodo(val){
-    $.post("/api/todos", {name: [val]})
-    .then(newTodo => {
-        clearInput();
-        addTodo(newTodo);
-    })
-    .catch(err => console.log(err));
-}
-
-function updateTodo(todo){
-    let isDone = !todo.data('completed');
-    $.ajax({
-        method: 'PUT',
-        url: '/api/todos/' + todo.data('id'),
-        data: {completed: isDone}
-    })
-    .then(updatedTodo => {
-        todo.data('completed', isDone);
-        todo.toggleClass('done');
-    })
-    .catch(err => console.log(err));
-}
-
-function removeTodo(todo){
-    $.ajax({
-        method: 'DELETE',
-        url: '/api/todos/' + todo.data('id')
-    })
-    .then(res => {
-        console.log(res);
-        todo.remove();
-    })
-    .catch(err => console.log(err));
-}
-
-function clearInput(){
-    $('#todoInput').val('');
-}
+function clearInput () {
+    document.getElementById('todoInput').value = '';
+};
