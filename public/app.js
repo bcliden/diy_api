@@ -5,11 +5,10 @@ document.addEventListener('DOMContentLoaded', function(){
     fetch('/api/todos')
     .then(response => response.json())
     .then(addTodos)
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 
     todoInput.addEventListener('keydown', function(e){
         if(event.which == 13){
-            console.log(e.target.value)
             createTodo(e.target.value)
         }
     })
@@ -56,7 +55,7 @@ function createTodo(val){
         clearInput();
         addTodo(newTodo);
     })
-    .catch(err => console.log(err))
+    .catch(err => console.error(err))
 }
 
 function updateTodo(todo){
@@ -74,22 +73,18 @@ function updateTodo(todo){
     .then(updatedTodo => {
         todo.classList.toggle('done');        
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 }
 
 function removeTodo(todo){
     let url = `/api/todos/${todo.dataset._id}`;
-    console.log(todo.dataset._id.toString())
     let childTodo = document.querySelector(`[data-_id="${todo.dataset._id}"]`);
-    console.log(childTodo);
     fetch(url, {
         method: 'DELETE',
     })
     .then(res => res.json())
-    .then(res => {
-        console.log(res);
-        todo.parentNode.removeChild(childTodo)
-    })
+    .then(todo.parentNode.removeChild(childTodo))
+    .catch(err => console.error(err))
 }
 
 function clearInput(){
