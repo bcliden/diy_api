@@ -6,26 +6,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // .then(addTodos)
         .then(response => addTodos(response.data))        
         .catch(err => console.error(err));
-});
 
-todoInput.addEventListener('keydown', function(e){
-    if(event.which == 13){
-        createTodo(e.target.value)
-    }
-});
+    todoInput.addEventListener('keydown', function(e){
+        if(event.which == 13){
+            createTodo(e.target.value)
+        }
+    });
 
-list.addEventListener('click', function(e){
-    if(e.target && e.target.matches('li.task')){
-        updateTodo(e.target);
-    }
-});
+    list.addEventListener('click', function(e){
+        if(e.target && e.target.matches('li.task')){
+            updateTodo(e.target);
+        }
+    });
 
-list.addEventListener('click', function(e){
-    e.stopPropagation();
-    if(e.target && e.target.matches('span')){
-        removeTodo(e.target.parentNode);
-    }
-})
+    list.addEventListener('click', function(e){
+        e.stopPropagation();
+        if(e.target && e.target.matches('span')){
+            removeTodo(e.target.parentNode);
+        }
+    });
+    
+});
 
 function addTodos (todos) {
     todos.forEach(addTodo);
