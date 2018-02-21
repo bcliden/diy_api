@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $.getJSON("/api/todos")
     .then(addTodos)
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 
     $('#todoInput').keypress(function(event){
         if(event.which == 13){
@@ -52,7 +52,7 @@ function updateTodo(todo){
         todo.data('completed', isDone);
         todo.toggleClass('done');
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 }
 
 function removeTodo(todo){
@@ -61,10 +61,10 @@ function removeTodo(todo){
         url: '/api/todos/' + todo.data('id')
     })
     .then(res => {
-        console.log(res);
+        console.error(res);
         todo.remove();
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 }
 
 function clearInput(){
