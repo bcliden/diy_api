@@ -24,7 +24,16 @@ Cons:
   - parsing the body can be a pain without shortcut methods
   - Less support (78% of browser share as of 11/2017)
   
-### Axios (tbd)
+### Axios (axios branch)
+
+Pros:
+  - easy API to use with JSON
+  - promise based flow
+  - XMLHR based (no polyfill necessary)
+  - can be required into Node code for bundling
+  
+Cons:
+  - extra require or script tag needed, naturally
 
 ### XMLHttpRequest (tbd)
   
