@@ -11,4 +11,4 @@ mongoose.connect(uri, { useMongoClient: true })
         console.error('db connection failed: ', err.message)
     });
 
-module.exports.Todo = require('./todo')
+module.exports.Todo = require('./todo');
